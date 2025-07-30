@@ -19,10 +19,6 @@
   - 📦 Reusability - Share and compose workflow components
   - 🎨 Modern DX - All the tooling you expect from modern development
 
-  🏗️ Repositories
-
-  Core
-
   🎯 Current Status
 
   We're approaching Early Access - sign up for updates!
