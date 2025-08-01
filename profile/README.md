@@ -1,39 +1,52 @@
-  # **Type-safe Workflows-as-Code for GitHub Actions**
+# 🚀 **Stop configuring CI/CD. Start programming it.**
 
-  Say goodbye to YAML typos and hello to the future of CI/CD. Typeflows brings TypeScript, IDE support, and type safety to GitHub Actions
-  workflows.
+GitHub Actions is the 9th most disliked developer tool. We know why - you're debugging YAML in production instead of shipping features. 😤
 
-  ## 🚀 What is Typeflows?
+Typeflows brings **Workflows-as-Code** to GitHub Actions. Write type-safe workflows in TypeScript, Python, or Kotlin + others. Test them locally. Share them as packages. 
 
-  Typeflows transforms how you write GitHub Actions workflows by replacing fragile YAML with robust TypeScript. Get autocomplete, type
-  checking, refactoring, and all the modern development tools you love—right in your CI/CD workflows.
+## 🔥 The Problem
 
-  Instead of brittle YAML configurations that break without warning.
+- **One typo breaks everything** ❌ - and you only find out after pushing
+- **Copy-paste hell** 📋 - the same workflow across 50 repos, updated manually
+- **No way to test** 🎰 - push and pray is not a strategy
+- **Hidden limits** 🚧 - "workflow nesting too deep" errors appear from nowhere
 
-  ## ✨ Key Features
+## ✨ The Solution
 
-  - 🎯 Type Safety - Catch errors before they reach production
-  - 🔧 IDE Support - Full autocomplete, IntelliSense, and refactoring
-  - 🔄 YAML Compatibility - Import existing workflows, export when needed
-  - 🧪 Testing - Test your workflows locally before committing
-  - 📦 Reusability - Share and compose workflow components
-  - 🎨 Modern DX - All the tooling you expect from modern development
+Write workflows as real code:
 
-  ## 🎯 Current Status
+```typescript
+import { Workflow, Job, Ubuntu } from '@typeflows/github-actions'
 
-  We're approaching Early Access! Be sure to [sign up](https://typeflows.io/#signup) for updates!
+export class DeployWorkflow extends Workflow {
+  name = "Deploy to Production"
+  
+  build = new Job("build", {
+    runsOn: Ubuntu.latest,
+    steps: [
+      Actions.checkout(),
+      Actions.setupNode({ version: "20" }),
+      { run: "npm test && npm build" }
+    ]
+  })
+}
+```
 
- ##  🤝 Get Involved
+Then generate standard GitHub Actions YAML. Or import your existing YAML and convert to code. Zero lock-in.
 
-  - 💬 https://github.com/typeflows/roadmap/discussions - Share ideas and get help
-  - 🐛 https://github.com/typeflows/typeflows/issues - Help us improve
-  - 🗺️ https://github.com/typeflows/roadmap - See what's coming next
+## 🎯 What This Enables
 
-  ## 📞 Connect With Us
+- 🧪 **Test workflow orchestration locally** - know which jobs run when
+- 📦 **Publish workflow libraries** - `@company/k8s-deploy v2.1.0`
+- 🔧 **Refactor safely** - your IDE handles the heavy lifting
+- 🏪 **Build workflow marketplaces** - share battle-tested patterns across your entire org
 
-  - 🌐 [https://typeflows.io](https://typeflows.io)
-  - 💬 [https://discord.gg/typeflows](https://discord.gg/6XR2MSwVdK)
-  - 🐦 https://twitter.com/typeflows
+## 🌟 Get Early Access
 
-  ---
-  Ready to redefine your relationship with CI/CD? https://typeflows.io today.
+We're building the future of CI/CD. Join us.
+
+🚀 [typeflows.io](https://typeflows.io) | 💬 [Discord](https://discord.gg/6XR2MSwVdK) | 🐦 [Twitter](https://twitter.com/typeflows)
+
+---
+
+Made with ❤️ by developers who've had enough of YAML debugging.
