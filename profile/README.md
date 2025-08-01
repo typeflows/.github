@@ -1,6 +1,6 @@
 # 🚀 **Stop configuring CI/CD. Start programming it.**
 
-GitHub Actions is the 9th most disliked developer tool. We know why - you're debugging YAML in production instead of shipping features. 😤
+[GitHub Actions is the 9th most disliked developer tool](https://newsletter.pragmaticengineer.com/p/the-pragmatic-engineer-2025-survey). We know why - you're debugging YAML in production instead of shipping features. 😤
 
 Typeflows brings **Workflows-as-Code** to GitHub Actions. Write type-safe workflows in TypeScript, Python, or Kotlin + others. Test them locally. Share them as packages. 
 
