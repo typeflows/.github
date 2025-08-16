@@ -16,19 +16,42 @@ Typeflows brings **Workflows-as-Code** to GitHub Actions. Write type-safe workfl
 Write workflows as real code:
 
 ```typescript
-import { Workflow, Job, Ubuntu } from '@typeflows/github-actions'
+class Deploy implements WorkflowBuilder {
+    toWorkflow(): Workflow {
+        return Workflow("Deploy to Production")
+        {
+            on += Push
+            {
+                branches = Branches.only("main")
+                paths = Paths.only("src/**")
+            }
 
-export class DeployWorkflow extends Workflow {
-  name = "Deploy to Production"
-  
-  build = new Job("build", {
-    runsOn: Ubuntu.latest,
-    steps: [
-      Actions.checkout(),
-      Actions.setupNode({ version: "20" }),
-      { run: "npm test && npm build" }
-    ]
-  })
+            const buildJob = Job("build", UBUNTU_LATEST)
+            {
+                steps += checkout()
+
+                steps += useAction("actions/setup-node@v4")
+                {
+                    with["node-version"] = "20"
+                }
+
+                steps += runCommand("npm run build && npm test")
+            }
+
+            jobs += buildJob
+
+            jobs += Job("deploy", UBUNTU_LATEST)
+            {
+                needs += buildJob
+
+                steps += useAction("actions/deploy@v2")
+                {
+                    with["target"] = "production"
+                        with["token"] = "${{ secrets.DEPLOY_TOKEN }}"
+                }
+            }
+        }
+    }
 }
 ```
 
