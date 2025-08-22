@@ -1,53 +1,91 @@
-# 🚀 Typeflows: **Stop configuring CI/CD. Start programming it.**
+# 🎯 Typeflows: Stop configuring GitHub. Start programming it.
 
-**GitHub Actions is the [9th most disliked developer tool](https://newsletter.pragmaticengineer.com/p/the-pragmatic-engineer-2025-survey). We're fixing that.**
+**GitHub Actions is the [9th most disliked developer tool](https://newsletter.pragmaticengineer.com/p/the-pragmatic-engineer-2025-survey). We're fixing that (and a lot more!).**
 
-Write workflows as code. Test them locally. Ship with confidence.
-
-## Why Typeflows?
-
-**Stop debugging YAML in production.** Write type-safe workflows in Kotlin, Java, TypeScript, Python, or your favorite language. Your IDE catches errors before you push.
-
-**Test workflow orchestration locally.** Know which jobs run when. Validate trigger conditions. Test job dependencies. No more push-and-pray.
-
-**Share workflows as packages.** Import proven patterns. Version your CI/CD. Build a library of tested deployment strategies.
-
-## See It In Action
+Tired of debugging YAML in production? Write workflows as code:
 
 ```kotlin
 class Deploy : WorkflowBuilder {
-    override fun toWorkflow() = Workflow("Deploy to Production") {
-        on += Push {
-            branches = Branches.Only("main")
-            paths = Paths.Only("src/**")
-        }
-
+    override fun build() = Workflow("Deploy to Production") {
+        on += Push { branches = Branches.Only("main") }
+        
         val buildJob = Job("build", UBUNTU_LATEST) {
             steps += checkout()
-            steps += UseAction("actions/setup-node@v4") {
-                with["node-version"] = "20"
-            }
-            steps += RunCommand("npm run build && npm test")
+            steps += gradleSetup()
+            steps += RunCommand("./gradlew build test")
         }
-
+        
         jobs += buildJob
-
         jobs += Job("deploy", UBUNTU_LATEST) {
             needs += buildJob
-            steps += UseAction("actions/deploy@v2") {
-                with["target"] = "production"
-                with["token"] = "${{ secrets.DEPLOY_TOKEN }}"
-            }
+            steps += deployToProduction()
         }
     }
 }
 ```
 
-Generates standard GitHub Actions YAML. Import existing workflows. **Zero lock-in.**
+✅ Full IDE support - catch errors before you push  
+✅ Test locally - know which jobs run when  
+✅ Share as packages - `com.company:standard-workflows`  
 
-## Get Started
+**But here's the thing...** Workflows are just the beginning.
 
-**Free during beta.** SDK coming Q3 2025.
+## 📦 Your entire .github/ folder as code
+
+Every repo starts with copy-pasting .github/ folders. Typeflows solves that too:
+
+```kotlin
+class DotGitHub : DotGitHubBuilder {
+    override fun build() = DotGitHub {
+        // Those type-safe workflows
+        workflows += Deploy()
+        workflows += ContinuousIntegration()
+        
+        // Security that scales
+        files += dependabot(Dependabot {
+            updates += Update(Maven) { schedule = Schedule(Weekly) }
+        })
+        
+        // Team standards
+        files += codeowners(TeamOwnership())
+        files += securityPolicy(CompanySecurityPolicy())
+        
+        // And everything else in .github/
+        files += copilotInstructions("kotlin.md", KotlinStyleGuide())
+    }
+}
+```
+
+One command generates everything. Version it. Test it. Share it as a library.
+
+## Why Typeflows?
+
+### 🔧 **Complete GitHub Configuration**
+Not just workflows - manage dependabot, CODEOWNERS, security policies, issue templates, and every .github/ file as type-safe code.
+
+### 🧪 **Test Before You Push**
+Test workflow orchestration locally. Validate security policies. Ensure dependabot coverage. Know your configuration works before deployment.
+
+### 📦 **Share as Packages**
+Share proven GitHub setups across your organization. Version your standards. Update everywhere at once.
+- JVM: `implementation("com.company:github-config:1.0")`
+- JS/TS: `npm install @company/github-config` 
+- Python: `pip install company-github-config`
+
+### 🚀 **Zero Lock-in**
+Generates standard GitHub configuration files. Import existing .github/ folders. Switch back anytime.
+
+## 🛠️ See It In Action
+
+Check out working examples: [github.com/typeflows/examples](https://github.com/typeflows/examples)
+
+## Getting Started
+
+**Free during beta.** 
+
+**Available now:** JVM (Kotlin/Java) SDK  
+**Coming Q3 2025:** TypeScript, Python  
+**Future:** Go, Rust, .NET based on demand
 
 🌐 [typeflows.io](https://typeflows.io) - Join the waitlist  
 💬 [Discord](https://discord.gg/6XR2MSwVdK) - Chat with us  
@@ -55,4 +93,4 @@ Generates standard GitHub Actions YAML. Import existing workflows. **Zero lock-i
 
 ---
 
-*Built by developers who've debugged one too many YAML files at 3am.*
+*Built by developers who copy-pasted one too many .github/ folders.*
