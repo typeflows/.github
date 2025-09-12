@@ -6,7 +6,8 @@ Tired of debugging YAML in production? Write workflows as code:
 
 ```kotlin
 class Deploy : WorkflowBuilder {
-    override fun build() = Workflow("Deploy to Production") {
+    override fun build() = Workflow("deploy-to-production") {
+        displayName = "Deploy to Production"
         on += Push { branches = Branches.Only("main") }
         
         val buildJob = Job("build", UBUNTU_LATEST) {
@@ -26,6 +27,7 @@ class Deploy : WorkflowBuilder {
 
 ✅ Full IDE support - catch errors before you push  
 ✅ Test locally - know which jobs run when  
+✅ Visualise your workflows - see how things run and why 
 ✅ Share as packages - `com.company:standard-workflows`  
 
 **But here's the thing...** Workflows are just the beginning.
